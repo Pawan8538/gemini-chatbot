@@ -1,0 +1,40 @@
+conversational-ai-customer-service/
+├── backend/                    # Backend logic (API, AI integration, DB)
+│   ├── controllers/            # Business logic for handling requests
+│   │   └── chatController.js   # Handles chat interactions and AI requests
+│   ├── models/                 # Database models (MongoDB)
+│   │   └── user.js             # User interaction schema/model
+│   ├── routes/                 # API routes for handling requests
+│   │   └── chatRoutes.js       # Routes for chat-related API calls
+│   ├── services/               # Service layer for AI integration
+│   │   └── aiService.js        # Interacts with OpenAI/Dialogflow API
+│   ├── utils/                  # Utility functions (e.g., error handling)
+│   │   └── sentimentAnalysis.js # Sentiment analysis logic
+│   ├── .env                    # Environment variables (API keys, DB credentials)
+│   ├── app.js                  # Main backend app file (Express)
+│   └── package.json            # Backend dependencies and scripts
+│
+├── frontend/                   # Frontend logic (React)
+│   ├── components/             # Reusable components
+│   │   └── ChatWindow.js       # The chat UI component
+│   ├── pages/                  # React pages
+│   │   └── index.js            # Home page or main chat page
+│   ├── services/               # Handles API calls to backend
+│   │   └── chatService.js      # Communicates with the backend chat API
+│   ├── styles/                 # Global styles (CSS/SCSS)
+│   │   └── global.css          # Global styling for components
+│   ├── public/                 # Static files (images, icons)
+│   │   └── logo.png            # Project logo or branding
+│   ├── .env                    # Environment variables for frontend
+│   ├── package.json            # Frontend dependencies and scripts
+│   ├── tailwind.config.js      # Tailwind CSS configuration
+│   ├── postcss.config.js       # PostCSS configuration
+│   ├── package-lock.json       # Frontend lock file (using npm)
+│   └── node_modules/           # Frontend node modules
+│
+├── db/                         # Database configuration and migrations
+│   └── mongoDB.js              # MongoDB connection setup (using mongoose)
+│
+├── .gitignore                  # Git ignore rules
+├── README.md                   # Project overview and instructions
+└── docker-compose.yml          # Docker compose for local development (optional)
