@@ -60,14 +60,14 @@
         document.addEventListener("DOMContentLoaded", async function () {
             let sessionId = localStorage.getItem("sessionId") || generateSessionId();
             localStorage.setItem("sessionId", sessionId);
-    
+        
             const chatBox = document.getElementById("chatBox");
-    
+        
             // ✅ Fetch chat history when the page loads
             try {
-                const historyResponse = await fetch(`/api/chat/${sessionId}`);  // Updated to match /chat/:sessionId
+                const historyResponse = await fetch(`/api/chat/${sessionId}`);
                 const history = await historyResponse.json();
-    
+        
                 if (history.length > 0) {
                     history.forEach(chat => {
                         chatBox.innerHTML += `
@@ -75,7 +75,7 @@
                                 ${chat.userMessage}
                             </div>
                             <div class="bg-gray-700 text-gray-200 p-4 rounded-lg w-full mb-2 shadow-md">
-                                ${chat.botResponse}
+                                <pre class="whitespace-pre-wrap">${chat.botResponse}</pre>
                             </div>
                         `;
                     });
@@ -84,7 +84,7 @@
             } catch (error) {
                 console.error("❌ Error fetching chat history:", error);
             }
-    
+        
             // ✅ Handle new messages
             document.getElementById("chatForm").addEventListener("submit", async function (event) {
                 event.preventDefault();
@@ -93,34 +93,50 @@
                 const message = messageInput.value.trim();
                 
                 if (!message) return;
-    
+        
+                // ✅ Display User Message
                 chatBox.innerHTML += `<div class="bg-indigo-600 text-white p-3 rounded-lg w-fit max-w-lg ml-auto mb-2 shadow-md">${message}</div>`;
                 chatBox.scrollTop = chatBox.scrollHeight;
                 messageInput.value = "";
-    
+        
+                // ✅ Show Loading Indicator
+                const loadingMessage = document.createElement("div");
+                loadingMessage.className = "bg-gray-700 text-gray-200 p-4 rounded-lg w-full mb-2 shadow-md";
+                loadingMessage.innerHTML = `<pre>🤖 AI is thinking...</pre>`;
+                chatBox.appendChild(loadingMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+        
                 try {
                     const response = await fetch("/api/chat", {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ message, sessionId })
                     });
-    
+        
                     const data = await response.json();
-                    chatBox.innerHTML += `<div class="bg-gray-700 text-gray-200 p-4 rounded-lg w-full mb-2 shadow-md">${data.response || "❌ Error fetching response"}</div>`;
+                    
+                    // ✅ Remove Loading Indicator & Show AI Response
+                    chatBox.removeChild(loadingMessage);
+                    chatBox.innerHTML += `
+                        <div class="bg-gray-700 text-gray-200 p-6 rounded-lg w-full mb-2 shadow-md">
+                            <pre class="whitespace-pre-wrap">${data.response || "❌ Error fetching response"}</pre>
+                        </div>
+                    `;
                     chatBox.scrollTop = chatBox.scrollHeight;
                 } catch (error) {
                     console.error("❌ Fetch Error:", error);
+                    chatBox.removeChild(loadingMessage);
+                    chatBox.innerHTML += `<div class="bg-red-500 text-white p-3 rounded-lg w-full mb-2 shadow-md">❌ Failed to get AI response.</div>`;
                 }
             });
         });
-    
+        
+        // ✅ Function to Generate Unique Session ID
         function generateSessionId() {
             return "sess-" + Math.random().toString(36).substr(2, 9);
         }
-
-
-
-        // for clear button
+        
+        // ✅ Clear Chat Button
         document.getElementById("clearChat").addEventListener("click", async function () {
             let sessionId = localStorage.getItem("sessionId");
         
@@ -131,6 +147,8 @@
         
             document.getElementById("chatBox").innerHTML = "<p class='text-gray-400 text-center'>Chat cleared.</p>";
         });
+        
+        
         
     </script>
     
