@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: gemini-chatbot  # ✅ Set the project name (can be anything)
+    rootDir: backend  # ✅ Ensure Render looks inside the backend folder
+    buildCommand: npm install  # ✅ Installs dependencies
+    startCommand: node app.js  # ✅ Starts the app
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://pawanpatidar8538:<admin>@chathistory.kqgfl.mongodb.net/?retryWrites=true&w=majority&appName=chathistory
+      - key: PORT
+        value: 5001

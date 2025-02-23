@@ -7,12 +7,22 @@ const chatRoutes = require('./routes/chatRoutes');
 const app = express();
 const PORT = process.env.PORT || 8000;
 const MONGO_URI = process.env.MONGO_URI;
+const clientOptions = { serverApi: { version: '1', strict: true, deprecationErrors: true } };
 
-// MongoDB Connection
-mongoose.connect(MONGO_URI, {
-})
-.then(() => console.log('✅ MongoDB Connected'))
-.catch(err => console.error('❌ MongoDB Connection Error:', err));
+
+async function run() {
+  try {
+    // Create a Mongoose client with a MongoClientOptions object to set the Stable API version
+    await mongoose.connect(MONGO_URI, clientOptions);
+    await mongoose.connection.db.admin().command({ ping: 1 });
+    console.log("Pinged your deployment. You successfully connected to MongoDB!");
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+run();
+
 
 // Middleware
 app.use(express.json());

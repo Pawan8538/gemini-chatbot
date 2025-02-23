@@ -1,6 +1,6 @@
 const Chat = require("../models/chat");
 const { getAIResponse } = require("../services/aiService");
-
+const chat = require("../models/chat")
 /**
  * Handles user chat requests, retrieves AI response, and stores the conversation in MongoDB.
  * @param {Object} req - The request object containing user message and session ID.
